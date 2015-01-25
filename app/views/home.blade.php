@@ -2,6 +2,8 @@
 <html>
 <head>
 	<title>fontface.ge</title>
+	<script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
+	<link rel="import" href="bower_components/polymer/polymer.html">
 </head>
 <body>
 	<h1>Hi!</h1>

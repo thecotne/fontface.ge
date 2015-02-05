@@ -26,7 +26,7 @@ Route::post('/', array('as' => 'home', function()
 		$fontsMap[ $file->getRealPath() ] = $key;
 		$filePathsStr .= " " . $file->getRealPath();
 	}
-	$json = shell_exec("fontforge -script font.py$filePathsStr");
+	$json = shell_exec("fontforge -script ".base_path()."/font.py$filePathsStr");
 	$result = json_decode($json, true);
 	if ($result['status'] = 1) {
 		$fonts = array();

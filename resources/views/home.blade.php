@@ -10,8 +10,5 @@
 		"autoHint" და "autoInstr" ფუნქციებს
 	</p>
 
-	{!! Form::open(array('url' => route('home'), 'files'=>true)) !!}
-		{!! Form::file('files[]', array('multiple'=>true)) !!}
-		{!! Form::submit('convert')!!}
-	{!! Form::close() !!}
+	<a href="{{ route('font.create') }}">ფონტის ატვირთვა</a>
 @endsection

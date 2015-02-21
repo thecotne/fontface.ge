@@ -31,6 +31,18 @@ class FontController extends Controller {
 	}
 
 	/**
+	 * execute command
+	 *
+	 * @param  $directory path to execute command in
+	 * @param  $command
+	 * @return results Object
+	 */
+	protected function executeCommand($directory, $command) {
+		$result = shell_exec('cd "'. $directory .'" && '. $command);
+		return json_decode($result);
+	}
+
+	/**
 	 * Store a newly created resource in storage.
 	 *
 	 * @return Response
@@ -38,20 +50,18 @@ class FontController extends Controller {
 	public function store(Request $request, Zipper $Zipper)
 	{
 		$files = $request->file('files');
-		$fontsMap = array();
+		$fontsMap = [];
 		$filePathsStr = '';
 		foreach ($files as $key => $file) {
 			$fontsMap[ $file->getRealPath() ] = $key;
 			$filePathsStr .= " " . $file->getRealPath();
 		}
 
-		$basePath = base_path();
-		$json = shell_exec("fontforge -script \"{$basePath}/font.py\"$filePathsStr");
-		$result = json_decode($json, true);
+		$result = $this->executeCommand(base_path(), "fontforge -script font.py$filePathsStr");
 
-		if ($result['status'] = 1) {
+		if ($result->status == 1) {
 			$fonts = array();
-			foreach ($result['converted'] as $key => $name) {
+			foreach ($result->converted as $key => $name) {
 				$file = $files[ $fontsMap[$key] ];
 				$fonts[] = $name;
 				$ext = $file->getClientOriginalExtension();

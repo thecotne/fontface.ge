@@ -106,10 +106,10 @@ class FontController extends Controller {
 				]);
 				$fs->put($this->fontsDirectory ."/$name/example.html", $example);
 
-				if ($fs->exists($this->fontsDirectory ."/$name/$name [cotne.com].zip")) {
-					$fs->delete($this->fontsDirectory ."/$name/$name [cotne.com].zip");
+				if ($fs->exists($this->fontsDirectory ."/$name/$name [fontface.ge].zip")) {
+					$fs->delete($this->fontsDirectory ."/$name/$name [fontface.ge].zip");
 				}
-				$Zipper->make($this->fontsDirectory ."/$name/$name [cotne.com].zip");
+				$Zipper->make($this->fontsDirectory ."/$name/$name [fontface.ge].zip");
 				$Zipper->add($this->fontsDirectory ."/$name");
 			}
 			return view('uploaded')->withFonts($fonts);

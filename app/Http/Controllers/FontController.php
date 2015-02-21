@@ -108,7 +108,7 @@ class FontController extends Controller {
 					$fs->delete("public/webfonts/$name/$name [cotne.com].zip");
 				}
 				$Zipper->make("public/webfonts/$name/$name [cotne.com].zip");
-				$Zipper->add(glob("public/webfonts/$name"));
+				$Zipper->add("public/webfonts/$name");
 			}
 			return view('uploaded')->withFonts($fonts);
 		}else{

@@ -70,6 +70,8 @@ class FontController extends Controller {
 		return implode($glue, array_keys($array));
 	}
 
+	protected $fontsDirectory = 'public/webfonts';
+
 	/**
 	 * Store a newly created resource in storage.
 	 *
@@ -90,25 +92,25 @@ class FontController extends Controller {
 				$file = $files[ $fontsMap[$key] ];
 				$fonts[] = $name;
 				$ext = $file->getClientOriginalExtension();
-				$file->move("public/webfonts/$name/fonts","original.$ext");
+				$file->move($this->fontsDirectory ."/$name/fonts","original.$ext");
 
-				if ( ! $fs->exists("public/webfonts/$name/css")) {
-					$fs->makeDirectory("public/webfonts/$name/css");
+				if ( ! $fs->exists($this->fontsDirectory ."/$name/css")) {
+					$fs->makeDirectory($this->fontsDirectory ."/$name/css");
 				}
 				$style = view('fontface')->withName($name);
 
-				$fs->put("public/webfonts/$name/css/$name.css", $style);
+				$fs->put($this->fontsDirectory ."/$name/css/$name.css", $style);
 				$example = view('example', [
 					'name' => $name,
 					'ext' => $ext
 				]);
-				$fs->put("public/webfonts/$name/example.html", $example);
+				$fs->put($this->fontsDirectory ."/$name/example.html", $example);
 
-				if ($fs->exists("public/webfonts/$name/$name [cotne.com].zip")) {
-					$fs->delete("public/webfonts/$name/$name [cotne.com].zip");
+				if ($fs->exists($this->fontsDirectory ."/$name/$name [cotne.com].zip")) {
+					$fs->delete($this->fontsDirectory ."/$name/$name [cotne.com].zip");
 				}
-				$Zipper->make("public/webfonts/$name/$name [cotne.com].zip");
-				$Zipper->add("public/webfonts/$name");
+				$Zipper->make($this->fontsDirectory ."/$name/$name [cotne.com].zip");
+				$Zipper->add($this->fontsDirectory ."/$name");
 			}
 			return view('uploaded')->withFonts($fonts);
 		}else{

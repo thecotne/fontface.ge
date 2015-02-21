@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Filesystem\Filesystem;
 
 use Chumper\Zipper\Zipper;
 
@@ -74,7 +75,7 @@ class FontController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store(Request $request, Zipper $Zipper)
+	public function store(Request $request, Zipper $Zipper, Filesystem $fs)
 	{
 		$files = $request->file('files');
 		$fontsMap = $this->simpleFilesArray($files);
@@ -90,18 +91,21 @@ class FontController extends Controller {
 				$fonts[] = $name;
 				$ext = $file->getClientOriginalExtension();
 				$file->move("public/webfonts/$name/fonts","original.$ext");
-				if (!file_exists("public/webfonts/$name/css")) {
-					mkdir("public/webfonts/$name/css");
+
+				if ( ! $fs->exists("public/webfonts/$name/css")) {
+					$fs->makeDirectory("public/webfonts/$name/css");
 				}
 				$style = view('fontface')->withName($name);
-				file_put_contents("public/webfonts/$name/css/$name.css", $style);
+
+				$fs->put("public/webfonts/$name/css/$name.css", $style);
 				$example = view('example', [
 					'name' => $name,
 					'ext' => $ext
 				]);
-				file_put_contents("public/webfonts/$name/example.html", $example);
-				if (file_exists("public/webfonts/$name/$name [cotne.com].zip")) {
-					unlink("public/webfonts/$name/$name [cotne.com].zip");
+				$fs->put("public/webfonts/$name/example.html", $example);
+
+				if ($fs->exists("public/webfonts/$name/$name [cotne.com].zip")) {
+					$fs->delete("public/webfonts/$name/$name [cotne.com].zip");
 				}
 				$Zipper->make("public/webfonts/$name/$name [cotne.com].zip");
 				$Zipper->add(glob("public/webfonts/$name"));

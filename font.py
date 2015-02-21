@@ -17,9 +17,7 @@ try:
 			font.selection.all()
 			font.autoHint()
 			font.autoInstr()
-			font.generate(dr+'/font.ttf',flags=())
-			font.generate(dr+'/font.otf',flags=())
-			font.generate(dr+'/font.eot',flags=())
+			font.generate(dr+'/'+ font.familyname +'.ttf',flags=())
 			font.close()
 			del font
 		print json.dumps({'status':1,'msg':'OK','converted':converted,'error':0})

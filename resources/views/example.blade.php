@@ -12,16 +12,16 @@
 	<h3 class="original">Example Text საცდელი ტექსტი</h3>
 	<h3 class="generated">Example Text საცდელი ტექსტი</h3>
 	<h4 class="original">Example Text საცდელი ტექსტი</h4>
-	<h4 class="generated small">Example Text საცდელი ტექსტი</h4>
+	<h4 class="generated">Example Text საცდელი ტექსტი</h4>
 	<h5 class="original">Example Text საცდელი ტექსტი</h5>
-	<h5 class="generated small">Example Text საცდელი ტექსტი</h5>
+	<h5 class="generated">Example Text საცდელი ტექსტი</h5>
 	<h6 class="original">Example Text საცდელი ტექსტი</h6>
-	<h6 class="generated small">Example Text საცდელი ტექსტი</h6>
+	<h6 class="generated">Example Text საცდელი ტექსტი</h6>
 
 	<style>
 		@font-face{
 			font-family: "{{ $name }} __original";
-			src: url("fonts/original.{{ $ext }}");
+			src: url("fonts/_{{ $name }}.{{ $fileExtension }}");
 		}
 		.original{
 			font-family: "{{ $name }} __original";
@@ -36,9 +36,6 @@
 			border-left: 2px solid green;
 			padding-left: 2px;
 			margin: 2px;
-		}
-		.generated.small{
-			font-family: "{{ $name }} -small-";
 		}
 		* {
 			font-weight: normal;

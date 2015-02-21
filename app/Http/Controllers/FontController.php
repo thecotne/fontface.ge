@@ -91,8 +91,8 @@ class FontController extends Controller {
 			foreach ($result->converted as $key => $name) {
 				$file = $files[ $fontsMap[$key] ];
 				$fonts[] = $name;
-				$ext = $file->getClientOriginalExtension();
-				$file->move($this->fontsDirectory ."/$name/fonts","original.$ext");
+				$fileExtension = $file->getClientOriginalExtension();
+				$file->move($this->fontsDirectory ."/$name/fonts","_$name.$fileExtension");
 
 				if ( ! $fs->exists($this->fontsDirectory ."/$name/css")) {
 					$fs->makeDirectory($this->fontsDirectory ."/$name/css");
@@ -102,7 +102,7 @@ class FontController extends Controller {
 				$fs->put($this->fontsDirectory ."/$name/css/$name.css", $style);
 				$example = view('example', [
 					'name' => $name,
-					'ext' => $ext
+					'fileExtension' => $fileExtension
 				]);
 				$fs->put($this->fontsDirectory ."/$name/example.html", $example);
 

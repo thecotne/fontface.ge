@@ -31,7 +31,7 @@ class FontController extends Controller {
 	}
 
 	/**
-	 * execute command
+	 * Execute command
 	 *
 	 * @param  $directory path to execute command in
 	 * @param  $command
@@ -43,6 +43,33 @@ class FontController extends Controller {
 	}
 
 	/**
+	 * Generate array of RealPath and key
+	 *
+	 * @param  Array $files
+	 * @return Array
+	 */
+	protected function simpleFilesArray(Array $files)
+	{
+		$array = [];
+		foreach ($files as $key => $file) {
+			$array[ $file->getRealPath() ] = $key;
+		}
+		return $array;
+	}
+
+	/**
+	 * Implode array keys
+	 *
+	 * @param  $glue string
+	 * @param  $pieces Array
+	 * @return string
+	 */
+	protected function implodeArrayKeys($glue, Array $pieces)
+	{
+		return implode($glue, array_keys($array));
+	}
+
+	/**
 	 * Store a newly created resource in storage.
 	 *
 	 * @return Response
@@ -50,17 +77,14 @@ class FontController extends Controller {
 	public function store(Request $request, Zipper $Zipper)
 	{
 		$files = $request->file('files');
-		$fontsMap = [];
-		$filePathsStr = '';
-		foreach ($files as $key => $file) {
-			$fontsMap[ $file->getRealPath() ] = $key;
-			$filePathsStr .= " " . $file->getRealPath();
-		}
+		$fontsMap = $this->simpleFilesArray($files);
 
-		$result = $this->executeCommand(base_path(), "fontforge -script font.py$filePathsStr");
+		$spaceSeperatedFilePaths = implode(' ', array_keys($fontsMap));
+
+		$result = $this->executeCommand(base_path(), "fontforge -script font.py $spaceSeperatedFilePaths");
 
 		if ($result->status == 1) {
-			$fonts = array();
+			$fonts = [];
 			foreach ($result->converted as $key => $name) {
 				$file = $files[ $fontsMap[$key] ];
 				$fonts[] = $name;
@@ -71,10 +95,10 @@ class FontController extends Controller {
 				}
 				$style = view('fontface')->withName($name);
 				file_put_contents("public/webfonts/$name/css/$name.css", $style);
-				$example = view('example', array(
+				$example = view('example', [
 					'name' => $name,
 					'ext' => $ext
-				));
+				]);
 				file_put_contents("public/webfonts/$name/example.html", $example);
 				if (file_exists("public/webfonts/$name/$name [cotne.com].zip")) {
 					unlink("public/webfonts/$name/$name [cotne.com].zip");

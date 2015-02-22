@@ -2,7 +2,7 @@
 
 @section('content')
 	<h1>Hi!</h1>
-	<h3>upload font or visit <a href="webfonts">gallery</a></h3>
+	<h3>upload font or visit <a href="/font">gallery</a></h3>
 	<p>
 		ეს ფონტების კონვერტორი შექმნილია unicode ფონტების ვებში <br>
 		ხარვეზების გარეშე გამოსაჩენათ <br>

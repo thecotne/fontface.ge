@@ -2,8 +2,8 @@
 
 @section('content')
 	@foreach ($fonts as $name)
-		<a href="webfonts/{{ $name }}/{{ $name }} [cotne.com].zip">Download {{ $name }}</a>
-		<iframe class="font_review" src="webfonts/{{ $name }}/example.html"></iframe>
+		<a href="/webfonts/{{ $name }}/{{ $name }} [fontface.ge].zip">Download {{ $name }}</a>
+		<iframe class="font_review" src="/webfonts/{{ $name }}/example.html"></iframe>
 	@endforeach
 
 	<style>

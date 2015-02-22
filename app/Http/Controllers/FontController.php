@@ -11,14 +11,45 @@ use Chumper\Zipper\Zipper;
 
 class FontController extends Controller {
 
+
+	/**
+	 * Remove use less directories (. and ..)
+	 *
+	 * @param  array $directories
+	 * @return array
+	 */
+	protected function removeUseLessDirectories($directories) {
+		return array_diff($directories, ['.', '..']);
+	}
+
+	/**
+	 * Remove directories prefix
+	 *
+	 * @param  array $array
+	 * @param  string $prefix
+	 * @return array
+	 */
+	protected function removeDirectoriesPrefix($array, $prefix) {
+		$prefix = preg_replace("/(\/|\\\\)/", "(\/|\\\\\\\\)", $prefix);
+		$replace = "/^$prefix(\/|\\\\)/";
+		foreach ($array as & $directory) {
+			$directory = preg_replace($replace, '', $directory);
+		}
+		return $array;
+	}
+
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index(Filesystem $fs)
 	{
-		//
+		$fonts = $fs->directories($this->fontsDirectory);
+		$fonts = $this->removeDirectoriesPrefix($fonts, $this->fontsDirectory);
+		$fonts = $this->removeUseLessDirectories($fonts);
+
+		return view('font/index')->withFonts($fonts);
 	}
 
 	/**

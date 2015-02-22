@@ -11,6 +11,9 @@ use Chumper\Zipper\Zipper;
 
 class FontController extends Controller {
 
+	public function __construct(){
+		chdir(base_path());
+	}
 
 	/**
 	 * Remove use less directories (. and ..)

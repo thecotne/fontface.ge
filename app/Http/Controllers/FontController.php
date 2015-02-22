@@ -121,12 +121,14 @@ class FontController extends Controller {
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  int  $id
+	 * @param  int  $fontFamily
 	 * @return Response
 	 */
-	public function show($id)
+	public function show($fontFamily, Filesystem $fs)
 	{
-		//
+		if ($fs->exists($this->fontsDirectory ."/". $fontFamily)) {
+			return view('uploaded')->withFonts([$fontFamily]);
+		}
 	}
 
 	/**

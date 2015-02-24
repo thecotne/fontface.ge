@@ -9,6 +9,8 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 
 use Chumper\Zipper\Zipper;
 
+use App\Font;
+
 class FontController extends Controller {
 
 	public function __construct(){
@@ -16,43 +18,13 @@ class FontController extends Controller {
 	}
 
 	/**
-	 * Remove use less directories (. and ..)
-	 *
-	 * @param  array $directories
-	 * @return array
-	 */
-	protected function removeUseLessDirectories($directories) {
-		return array_diff($directories, ['.', '..']);
-	}
-
-	/**
-	 * Remove directories prefix
-	 *
-	 * @param  array $array
-	 * @param  string $prefix
-	 * @return array
-	 */
-	protected function removeDirectoriesPrefix($array, $prefix) {
-		$prefix = preg_replace("/(\/|\\\\)/", "(\/|\\\\\\\\)", $prefix);
-		$replace = "/^$prefix(\/|\\\\)/";
-		foreach ($array as & $directory) {
-			$directory = preg_replace($replace, '', $directory);
-		}
-		return $array;
-	}
-
-	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return Response
 	 */
-	public function index(Filesystem $fs)
+	public function index(Font $fonts, Filesystem $fs)
 	{
-		$fonts = $fs->directories($this->fontsDirectory);
-		$fonts = $this->removeDirectoriesPrefix($fonts, $this->fontsDirectory);
-		$fonts = $this->removeUseLessDirectories($fonts);
-
-		return view('font/index')->withFonts($fonts);
+		return view('font/index')->withFonts($fonts->all());
 	}
 
 	/**
@@ -111,7 +83,7 @@ class FontController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store(Request $request, Zipper $Zipper, Filesystem $fs)
+	public function store(Font $font, Request $request, Zipper $Zipper, Filesystem $fs)
 	{
 		$files = $request->file('files');
 		$fontsMap = $this->simpleFilesArray($files);
@@ -145,6 +117,12 @@ class FontController extends Controller {
 				}
 				$Zipper->make($this->fontsDirectory ."/$name/$name [fontface.ge].zip");
 				$Zipper->add($this->fontsDirectory ."/$name");
+
+				if ( ! $font->where('fontFamily', $name)->first()) {
+					$font->fontFamily = $name;
+					$font->save();
+				}
+
 			}
 			return view('uploaded')->withFonts($fonts);
 		}else{
@@ -155,14 +133,12 @@ class FontController extends Controller {
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  int  $fontFamily
+	 * @param  Font $font
 	 * @return Response
 	 */
-	public function show($fontFamily, Filesystem $fs)
+	public function show(Font $font, Filesystem $fs)
 	{
-		if ($fs->exists($this->fontsDirectory ."/". $fontFamily)) {
-			return view('uploaded')->withFonts([$fontFamily]);
-		}
+		return view('uploaded')->withFonts([$font->fontFamily]);
 	}
 
 	/**

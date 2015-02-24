@@ -4,7 +4,7 @@
 
 @foreach ($fonts as $font)
 	<div>
-		<a href="/font/{{ $font }}">{{ $font }}</a>
+		<a href="/font/{{ $font->fontFamily }}">{{ $font->fontFamily }}</a>
 	</div>
 @endforeach
 

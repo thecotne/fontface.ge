@@ -11,6 +11,18 @@
 |
 */
 
+
+
+Route::bind('font', function($fontFamily)
+{
+	$font = App\Font::where('fontFamily', $fontFamily)->first();
+	if ($font) {
+		return $font;
+	} else {
+		throw new NotFoundHttpException;
+	}
+});
+
 Route::get('/', array('as' => 'home', function()
 {
 	return View::make('home');

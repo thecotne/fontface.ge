@@ -1,14 +1,27 @@
 @extends('app')
 
 @section('content')
-	<h1>Hi!</h1>
-	<h3>upload font or visit <a href="/font">gallery</a></h3>
-	<p>
-		ეს ფონტების კონვერტორი შექმნილია unicode ფონტების ვებში <br>
-		ხარვეზების გარეშე გამოსაჩენათ <br>
-		კონვერტორი იყენებს <a href="http://fontforge.org/">fontforge</a>-ის <br>
-		"autoHint" და "autoInstr" ფუნქციებს
-	</p>
-
-	<a href="{{ route('font.create') }}">ფონტის ატვირთვა</a>
+	<section vertical center-justified layout>
+		<div horizontal center-justified layout class="homepage">
+			<summary>
+				<h1 class="homepage-title">welcome to fontface.ge</h1>
+				<p class="homepage-line2">
+					we make life easier
+				</p>
+				<p class="homepage-line3">
+					<a href="{{ route('font.create') }}">
+						<paper-button raised unresolved>
+							upload file
+						</paper-button>
+					</a>
+					or
+					<a href="/font">
+						<paper-button raised unresolved>
+							visit gallery
+						</paper-button>
+					</a>
+				</p>
+			</summary>
+		</div>
+	</section>
 @endsection
